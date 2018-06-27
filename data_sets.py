@@ -30,7 +30,7 @@ class DataSets:
     def _create_y_tuple(self, x_tuple):
         y1 = self._create_y(x_tuple[0], self.y1_num)
         y2 = self._create_y(x_tuple[1], self.y2_num)
-        y = y1 + y2
+        y = (y1, y2)
         return y
 
     def create_data_sets(self, num=100000):
