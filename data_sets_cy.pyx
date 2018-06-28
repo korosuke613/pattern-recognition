@@ -1,7 +1,6 @@
 from libc.stdlib cimport rand, RAND_MAX
 from libc.math cimport sin, sqrt, log, M_PI
 from libcpp.vector cimport vector
-from libcpp.unordered_map cimport unordered_map
 
 cdef int sdlab_random(int min_num, int max_num):
     return int(min_num + (rand()*(max_num-min_num+1.0)/(1.0+RAND_MAX)))

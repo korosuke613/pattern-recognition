@@ -1,5 +1,5 @@
 from data_sets_cy import DataSets
-from statistics import Sg, St, Sp
+from statistics_cy import Sg, St, Sp
 import matplotlib.pyplot as plt
 from datetime import datetime
 from tqdm import tqdm
@@ -28,7 +28,8 @@ class ROC:
         data.create_data_sets(self.num)
         s = []
         for i in range(self.num):
-            s.append(ss(data.sets[i]['y'], self.y1_num, self.y2_num, self.sigma))
+            sss = ss(data.sets[i]['y'], self.y1_num, self.y2_num, self.sigma)
+            s.append(sss.get())
         return data.sets, s
 
     def calc_roc(self, s):
@@ -69,7 +70,7 @@ class ROC:
 
 
 def main2():
-    roc = ROC(num=10000)
+    roc = ROC(num=100000)
     roc.calc_roc(Sg)
     roc.draw_roc_curve(label='Sg', color='red')
     roc.calc_roc(St)
