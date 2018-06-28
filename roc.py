@@ -69,7 +69,7 @@ class ROC:
 
 
 def main2():
-    roc = ROC(num=100000)
+    roc = ROC(num=10000)
     roc.calc_roc(Sg)
     roc.draw_roc_curve(label='Sg', color='red')
     roc.calc_roc(St)

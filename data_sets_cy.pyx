@@ -1,5 +1,7 @@
 from libc.stdlib cimport rand, RAND_MAX
 from libc.math cimport sin, sqrt, log, M_PI
+from libcpp.vector cimport vector
+from libcpp.unordered_map cimport unordered_map
 
 cdef int sdlab_random(int min_num, int max_num):
     return int(min_num + (rand()*(max_num-min_num+1.0)/(1.0+RAND_MAX)))
@@ -27,6 +29,7 @@ cdef class DataSets:
 
     cdef tuple _create_x_tuple(self):
         cdef int r
+        cdef tuple result
         r = sdlab_random(1, 100)
         if r < 60:
             result = (0, 0)
@@ -38,15 +41,21 @@ cdef class DataSets:
             result = (1, 1)
         return result
 
+    cdef vector[double] _create_y_vec(self, int x, int y_num):
+        cdef vector[double] y_tuple
+        for _ in range(y_num):
+            y_tuple.push_back(x + sdlab_normal(0.0, self.hensa))
+        return y_tuple
+
     cdef list _create_y(self, int x, int y_num):
-        cdef list y_tuple
-        y_tuple = []
+        cdef list y_tuple = []
         for _ in range(y_num):
             y_tuple.append(x + sdlab_normal(0.0, self.hensa))
         return y_tuple
 
-    cdef tuple _create_y_tuple(self,tuple x_tuple):
+    cdef tuple _create_y_tuple(self, tuple x_tuple):
         cdef tuple y
+        cdef list y1, y2
         y1 = self._create_y(x_tuple[0], self.y1_num)
         y2 = self._create_y(x_tuple[1], self.y2_num)
         y = (y1, y2)
