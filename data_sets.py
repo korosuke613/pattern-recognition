@@ -22,7 +22,7 @@ class DataSets:
         return result
 
     def _create_y(self, x: int, y_num):
-        y_tuple = []
+        y_tuple = [] #[x + random.normalvariate(0.0, self.hensa) for _ in range(y_num)]
         for _ in range(y_num):
             y_tuple.append(x + random.normalvariate(0.0, self.hensa))
         return y_tuple

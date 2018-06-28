@@ -1,5 +1,5 @@
 from data_sets import DataSets
-from statistics_Sg import Sg, St
+from statistics_Sg import Sg, St, Sp
 import matplotlib.pyplot as plt
 from datetime import datetime
 from tqdm import tqdm
@@ -69,11 +69,13 @@ class ROC:
 
 
 def main2():
-    roc = ROC(num=100000)
+    roc = ROC(num=10000)
     roc.calc_roc(Sg)
     roc.draw_roc_curve(label='Sg', color='red')
     roc.calc_roc(St)
     roc.draw_roc_curve(label='St', color='blue')
+    roc.calc_roc(Sp)
+    roc.draw_roc_curve(label='Sp', color='green')
     roc.save_roc_curve()
 
 

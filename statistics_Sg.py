@@ -8,6 +8,8 @@ X = [_x, _x]
 X[0][0] = 0.6
 X[0][1] = X[1][0] = 0.1
 X[1][1] = 0.2
+prx1 = [0.7, 0.3]
+prx2 = [0.7, 0.3]
 
 
 def Sg(y: tuple, n1=3, n2=3, sigma=1.0, x_probability=X[1][1]):
@@ -43,6 +45,37 @@ def St(y: tuple, n1=3, n2=3, sigma=1.0, x_probability=X[1][1]):
 
     n = [n1, n2]
     return 1 / hT()
+
+
+def Sp(y: tuple, n1=3, n2=3, sigma=1.0, x_probability=X[1][1]):
+    def pyx(x, yi):
+        result = 0
+        for y in yi:
+            result += math.exp(-((y - x) ** 2) / (2 * sigma ** 2)) / (math.sqrt(2 * math.pi) * sigma)
+        return result
+
+    def prxy(y1):
+        def prxyx():
+            result = 0
+            for i in range(2):
+                result += (X[i][0] + X[i][1])*pyx(1, y1)
+            return result
+
+        return ((X[1][0] + X[1][1]) * pyx(1, y1)) / prxyx()
+
+    def prxxy(y2):
+        def prxxyx():
+            return X[1][1] * pyx(1, y2)
+
+        def prxxyx_sum():
+            result = 0
+            for i in range(2):
+                result += X[1][i] * pyx(i, y2)
+            return result
+
+        return prxxyx() / prxxyx_sum()
+
+    return prxy(y[0]) * prxxy(y[1])
 
 
 if __name__ == '__main__':
