@@ -1,5 +1,5 @@
 from data_sets_cy import DataSets
-from statistics_Sg import Sg, St, Sp
+from statistics import Sg, St, Sp
 import matplotlib.pyplot as plt
 from datetime import datetime
 from tqdm import tqdm
