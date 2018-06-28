@@ -10,24 +10,39 @@ X[0][1] = X[1][0] = 0.1
 X[1][1] = 0.2
 
 
-def Sg(y: tuple, n1=3, n2=3, sigma=1.0):
+def Sg(y: tuple, n1=3, n2=3, sigma=1.0, x_probability=X[1][1]):
     def calc_exp(x1, x2):
         x = (x1, x2)
         result = 0
         for i in range(2):
             for j in range(n[i]):
-                result += (1 - 2 * y[i][j] + 2 * y[i][j] * x[i] - x[i] ** 2) / sigma
-        return result
+                result += (1 - 2 * y[i][j] + 2 * y[i][j] * x[i] - x[i] ** 2) / (2 * sigma ** 2)
+        return math.exp(result)
 
-    def hG(y, x_probability=X[1][1]):
+    def hG():
         result = 0
-        for i in range(0, 1):
-            for j in range(0, 1):
-                result += X[i][j] * math.exp(calc_exp(i, j))
+        for i in range(2):
+            for j in range(2):
+                result += X[i][j] * calc_exp(i, j)
         return result / x_probability
 
     n = [n1, n2]
-    return 1 / hG(y)
+    return 1 / hG()
+
+
+def St(y: tuple, n1=3, n2=3, sigma=1.0, x_probability=X[1][1]):
+    def calc_exp():
+        result = 0
+        for i in range(2):
+            for j in range(n[i]):
+                result += (1 - 2 * y[i][j]) / (2 * (sigma ** 2))
+        return math.exp(result)
+
+    def hT():
+        return 1 + (X[0][0] * calc_exp()) / X[1][1]
+
+    n = [n1, n2]
+    return 1 / hT()
 
 
 if __name__ == '__main__':
