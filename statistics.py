@@ -51,7 +51,7 @@ def Sp(y: tuple, n1=3, n2=3, sigma=1.0, x_probability=X[1][1]):
     def pyx(x, yi):
         result = 0
         for y in yi:
-            result += math.exp(-((y - x) ** 2) / (2 * sigma ** 2)) / (math.sqrt(2 * math.pi) * sigma)
+            result += math.exp(-((y - x) ** 2) / (2 * sigma ** 2)) / (2 * math.pi * sigma)
         return result
 
     def prxy(y1):
