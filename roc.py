@@ -3,6 +3,7 @@ from statistics_cy import Sg, St, Sp
 import matplotlib.pyplot as plt
 from datetime import datetime
 from tqdm import tqdm
+import numpy as np
 
 
 class ROC:

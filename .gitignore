@@ -3,3 +3,4 @@ fig/
 *.cpp
 *.so
 build/
+.venv/
