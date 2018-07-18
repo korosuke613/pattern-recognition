@@ -1,5 +1,5 @@
 from data_sets_cy import DataSets
-from statistics_cy import Sg, St, Sp12, Sp21
+from statistics_cy import Sg, St, Sp
 import matplotlib.pyplot as plt
 from datetime import datetime
 from tqdm import tqdm
@@ -35,14 +35,14 @@ class ROC:
         _s = np.array(s)
         return np.vstack((_d, _s))
 
-    def create_Ss(self, ss1, ss2):
+    def create_Ss(self, ss):
         data = DataSets(self.y1_num, self.y2_num)
         data.create_data_sets(self.num)
         s = []
         for i in range(self.num):
-            sss1 = ss1(data.sets[i]['y'], self.y1_num, self.y2_num, self.sigma)
-            sss2 = ss2(data.sets[i]['y'], self.y1_num, self.y2_num, self.sigma)
-            if sss1.prX1GivenY1(sss1.get_n()) < sss2.prX1GivenY1(sss2.get_n()):
+            sss1 = ss(data.sets[i]['y'], self.y1_num, self.y2_num, self.sigma, isOneTwo=True)
+            sss2 = ss(data.sets[i]['y'], self.y1_num, self.y2_num, self.sigma, isOneTwo=False)
+            if sss1.pr1(sss1.get_n()) < sss2.pr1(sss2.get_n()):
                 sss = sss1
             else:
                 sss = sss2
@@ -51,14 +51,14 @@ class ROC:
         _s = np.array(s)
         return np.vstack((_d, _s))
 
-    def calc_roc_Ss(self, ss1, ss2):
+    def calc_roc_Ss(self, ss):
         def FPR():
             return fp / (len(data[1]) - xx_num)
 
         def CDR():
             return cd / xx_num
         self.roc.clear()
-        data = self.create_Ss(ss1, ss2)
+        data = self.create_Ss(ss)
         xx_num = self.count_xx(data[0])
         index = np.argsort(data[1])
         cd = fp = already_x = count = 0
@@ -110,11 +110,11 @@ def main2():
     roc.draw_roc_curve(label='Sg', color='red')
     roc.calc_roc(St)
     roc.draw_roc_curve(label='St', color='blue')
-    roc.calc_roc(Sp12)
+    roc.calc_roc(Sp)
     roc.draw_roc_curve(label='Sp1→2', color='green')
     #roc.calc_roc(Sp21)
     #roc.draw_roc_curve(label='Sp2→1', color='orange')
-    roc.calc_roc_Ss(Sp12, Sp21)
+    roc.calc_roc_Ss(Sp)
     roc.draw_roc_curve(label='Ss', color='black')
     roc.save_roc_curve()
 
