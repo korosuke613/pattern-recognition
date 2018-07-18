@@ -71,7 +71,7 @@ cdef class St:
     cpdef double get(self):
         return 1 / self.hT()
 
-cdef class Sp:
+cdef class Sp12:
     cdef tuple y
     cdef list n
     cdef int n1, n2
@@ -84,14 +84,48 @@ cdef class Sp:
         self.sigma = sigma
         self.n = [self.n1, self.n2]
 
+    def get_n(self):
+        return self.n
+
     cpdef double get(self):
         return 1.0 / self.invert()
     cdef double invert(self):
         return self.prX1GivenY1(self.n) * self.prX2GivenY2(self.n)
-    cdef double prX1GivenY1(self, list n_list):
+    cpdef double prX1GivenY1(self, list n_list):
         return 1 + ((X[0][0] + X[0][1]) / (X[1][0] + X[1][1]) * exp(self.inExp(n_list, 0)))
     cdef double prX2GivenY2(self, list n_list):
         return 1 + (X[1][0] / X[1][1] * exp(self.inExp(n_list, 1)))
+    cdef double inExp(self, list n_list, int i):
+        cdef double w = 0.0
+        cdef int j
+        for j in range(n_list[i]):
+            w += (1.0 - 2.0 * self.y[i][j]) / (2.0 * self.sigma * self.sigma)
+        return w
+
+cdef class Sp21:
+    cdef tuple y
+    cdef list n
+    cdef int n1, n2
+    cdef double sigma, x_probability
+
+    def __init__(self, tuple y, int n1=3, int n2=3, double sigma=1.0):
+        self.y = y
+        self.n1 = n1
+        self.n2 = n2
+        self.sigma = sigma
+        self.n = [self.n1, self.n2]
+
+    def get_n(self):
+        return self.n
+
+    cpdef double get(self):
+        return 1.0 / self.invert()
+    cdef double invert(self):
+        return self.prX1GivenY1(self.n) * self.prX2GivenY2(self.n)
+    cpdef double prX1GivenY1(self, list n_list):
+        return 1 + ((X[0][0] + X[0][1]) / (X[1][0] + X[1][1]) * exp(self.inExp(n_list, 1)))
+    cdef double prX2GivenY2(self, list n_list):
+        return 1 + (X[1][0] / X[1][1] * exp(self.inExp(n_list, 0)))
     cdef double inExp(self, list n_list, int i):
         cdef double w = 0.0
         cdef int j
